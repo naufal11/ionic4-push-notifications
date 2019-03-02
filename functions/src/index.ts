@@ -12,21 +12,19 @@ admin.initializeApp();
 
 exports.newSubscriberNotification = functions.firestore
     .document('documents/{userId}')
-    .onCreate(async (snap, context) => {
-        // const data = event.after.data();
+    .onWrite(async change => {
+        const data = change.after.data();
     
-        const userId = snap.data().approverId;
-        console.log(userId);
-        const doc = snap.data().docId;
-        console.log(doc);
-        const docName = snap.data().docName;
-        console.log(docName);
+        const userId = data.approverId;
+        const docId = data.docId;
+        const docName = data.docName;
+        const approvalStatus = data.approvalStatus;
 
         // Notification details.
         const payload = {
             notification: {
             title: 'New notifications!',
-            body: `${doc}, ${docName} has been approved.`
+            body: `${docId}, ${docName} has been ${approvalStatus}.`
             }
         };
 
@@ -45,6 +43,8 @@ exports.newSubscriberNotification = functions.firestore
 
         tokens.push(token);
         })
-
+        
+        console.log('tokens :', tokens);
+        
         return admin.messaging().sendToDevice(tokens, payload);
     });

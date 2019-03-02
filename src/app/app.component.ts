@@ -15,7 +15,8 @@ import { tap } from 'rxjs/operators';
 export class AppComponent {
   private data:any = {
     docId: 'CA/0010/112',
-    userId: '00500005'
+    userId: '00500005',
+    approvalStatus: ''
   };
 
   constructor(
@@ -43,23 +44,23 @@ export class AppComponent {
       tap(msg => {
         if (this.platform.is('ios')) {
           this.presentToast(msg.aps.alert);
-          console.log(`User opened a notification ${msg}`);
+          console.log(`User opened a notification`, msg);
         } else {
           this.presentToast(msg.body);
-          console.log(`User opened a notification ${msg}`);
+          console.log(`User opened a notification`, msg);
         }
       })
     )
     .subscribe();
-    }
+  }
 
-    private async presentToast(message) {
-      const toast = await this.toastController.create({
-        message,
-        duration: 10000,
-        position: 'top',
-        showCloseButton: true
-      });
-      toast.present();
-    }
+  private async presentToast(message) {
+    const toast = await this.toastController.create({
+      message,
+      duration: 10000,
+      position: 'top',
+      showCloseButton: true
+    });
+    toast.present();
+  }
 }

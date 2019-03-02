@@ -49,13 +49,14 @@ export class FcmService {
     return this.firebase.onNotificationOpen();
   }
 
-  requestNotifications(userId, docId) {
+  requestNotifications(userId, docId, approvalStatus) {
     const notifRef = this.afs.collection('documents');
 
     const notif = {
       docId: docId,
       docName: 'Approval Document',
-      approverId: userId
+      approverId: userId,
+      approvalStatus: approvalStatus
     };
 
     return notifRef.doc(userId).set(notif);

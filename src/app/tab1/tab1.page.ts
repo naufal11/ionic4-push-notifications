@@ -9,13 +9,15 @@ import { FcmService } from '../services/fcm.service';
 export class Tab1Page {
   private data:any = {
     docId: 'CA/0010/112',
-    userId: '00500005'
+    userId: '00500005',
+    approvalStatus: ''
   };
   
   constructor(private fcm: FcmService) { }
 
-  sendNotifications() {
-    this.fcm.requestNotifications(this.data.userId, this.data.docId).then(result => {
+  sendNotifications(approvalStatus) {
+    this.data.approvalStatus = approvalStatus;
+    this.fcm.requestNotifications(this.data.userId, this.data.docId, this.data.approvalStatus).then(result => {
       console.log('send request notifications...', result);
     });
   }
